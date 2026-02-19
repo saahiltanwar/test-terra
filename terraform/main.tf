@@ -7,16 +7,17 @@ terraform {
       version = "~> 5.0"
     }
   }
-
+//
   backend "gcs" {
     bucket = "my-project-tf-state"   # TODO: must match your bucket name (project_id + "-tf-state")
     prefix = "gke/state"
   }
 }
-
+//
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
+  default     = "graphite-nectar-487905-n6"
 }
 
 variable "region" {
