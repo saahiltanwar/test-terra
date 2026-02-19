@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app         # TODO: keep in sync with DEPLOYMENT_NAME in the workflow
+  labels:
+    app: my-app
+spec:
+  replicas: 1          # TODO: adjust replica count
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+
+      imagePullSecrets:
+        - name: dockerhub-secret
+
+      containers:
+        - name: my-app
+          image: IMAGE_PLACEHOLDER   # replaced at deploy time by the workflow
+          ports:
+            - containerPort: 8181    # TODO: change to your app's port
+
+          # Optional: resource limits to avoid runaway costs
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          # Optional: basic liveness probe
+          livenessProbe:
+            httpGet:
+              path: /health          # TODO: change to your health endpoint
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
